@@ -66,9 +66,15 @@ void _start(struct stivale2_struct *stivale2_struct) {
     printf("[OK] FB");
 
     init_isr();
+<<<<<<< HEAD
     printf("[OK] ");
     asm("int $0x20");
     printf("poggggg");
+=======
+    kprintf("hold up chat");
+    asm("int $0x20");
+    kprintf("poggggg");
+>>>>>>> 40976f6f7a5c05e20f73dfb9f2710a98167cec3b
 
     for (;;) {
         asm ("hlt");
