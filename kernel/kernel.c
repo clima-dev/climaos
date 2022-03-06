@@ -82,7 +82,7 @@ void _start(struct stivale2_struct *stivale2_struct) {
 
     init_isr();
     kprintf("hold up chat");
-    
+    asm("int $0x20");
     kprintf("poggggg");
 
     for (;;) {
