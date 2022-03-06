@@ -53,16 +53,20 @@ void *stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id) {
         current_tag = (void *)current_tag->next;
     }
 }
+struct stivale2_struct_tag_framebuffer *frm_tag;
+struct stivale2_struct_tag_terminal *term_tag;
 
 // The following will be our kernel's entry point.
 void _start(struct stivale2_struct *stivale2_struct) {
-    struct stivale2_struct_tag_framebuffer *fb_tag = (struct stivale2_struct_tag_framebuffer *)
-        stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
-    init_fb(fb_tag);
-    printf("[OK] FB %ux%u\n", fb_tag->framebuffer_width, fb_tag->framebuffer_height);
+    frm_tag = stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
+
+    term_tag = stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_TERMINAL_ID);
+
+    init_fb();
+    printf("[OK] FB");
 
     init_isr();
-    printf("hold up chat");
+    printf("[OK] ");
     asm("int $0x20");
     printf("poggggg");
 

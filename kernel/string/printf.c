@@ -120,10 +120,7 @@ typedef struct
 
 void _putchar(char character)
 {
-    if (character != NULL)
-    {
-        putc(character);
-    }
+    printc(character);
 }
 
 // internal buffer output
