@@ -78,9 +78,8 @@ void init_isr()
 
 void isr_handler(uint64_t id, regs_t *regs)
 {
-    kprintf(exception_messages[id]);
-    kprintf(regs->rip);
+    printf("%s", exception_messages[id]);
 
     for(;;)
-        asm("sti\nhlt\n");
+        asm("hlt");
 }

@@ -2,10 +2,10 @@
 #include <stddef.h>
 #include <stivale2.h>
 #include <isr.h>
+#include <string/printf.h>
+#include <framebuffer/framebuffer.h>
 
 static uint8_t stack[8192];
-
-void (*term_write)(const char *string, size_t length);
 
 static struct stivale2_header_tag_terminal terminal_hdr_tag = {
     // All tags need to begin with an identifier and a pointer to the next tag.
@@ -54,36 +54,17 @@ void *stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id) {
     }
 }
 
-extern size_t strlen(const char* str) 
-{
-	size_t len = 0;
-	while (str[len])
-		len++;
-	return len;
-}
-
-extern void kprintf(const char* str)
-{
-    term_write(str, strlen(str));
-}
-
 // The following will be our kernel's entry point.
 void _start(struct stivale2_struct *stivale2_struct) {
-    struct stivale2_struct_tag_terminal *term_str_tag;
-    term_str_tag = stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_TERMINAL_ID);
-
-    if (term_str_tag == NULL) {
-        for (;;) {
-            asm ("hlt");
-        }
-    }
-
-    term_write = (void (*)(const char*, size_t))term_str_tag->term_write;
+    struct stivale2_struct_tag_framebuffer *fb_tag = (struct stivale2_struct_tag_framebuffer *)
+        stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
+    init_fb(fb_tag);
+    printf("[OK] FB %ux%u\n", fb_tag->framebuffer_width, fb_tag->framebuffer_height);
 
     init_isr();
-    kprintf("hold up chat");
-    
-    kprintf("poggggg");
+    printf("hold up chat");
+    asm("int $0x20");
+    printf("poggggg");
 
     for (;;) {
         asm ("hlt");

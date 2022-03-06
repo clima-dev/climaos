@@ -4,7 +4,7 @@
 /* remember that IDT stands for Interrupt Descriptor Table
    the CPU will use this to know what to do when an interrupt is fired */
 
-__attribute__((aligned(0x10))); /* alignment is a matter of performance */
+__attribute__((aligned(0x10))) /* alignment is a matter of performance */
 static idt_entry_t idt[256];   /* define a new IDT with 256 gates/entries */
 static idtr_t idtr;
 

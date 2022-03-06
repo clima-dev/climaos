@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <utils/regs.h>
+#include <string/printf.h>
 
 extern void isr0();
 extern void isr1();
