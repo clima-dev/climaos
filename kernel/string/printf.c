@@ -62,8 +62,9 @@
 
 // support for exponential floating point notation (%e/%g)
 // default: activated
-#define PRINTF_DISABLE_SUPPORT_EXPONENTIAL
-
+#ifndef PRINTF_DISABLE_SUPPORT_EXPONENTIAL
+#define PRINTF_SUPPORT_EXPONENTIAL
+#endif
 // define the default floating point precision
 // default: 6 digits
 #ifndef PRINTF_DEFAULT_FLOAT_PRECISION
@@ -78,7 +79,9 @@
 
 // support for the long long types (%llu or %p)
 // default: activated
-#define PRINTF_DISABLE_SUPPORT_LONG_LONG
+#ifndef PRINTF_DISABLE_SUPPORT_LONG_LONG
+#define PRINTF_SUPPORT_LONG_LONG
+#endif
 
 // support for the ptrdiff_t type (%t)
 // ptrdiff_t is normally defined in <stddef.h> as long or long long type

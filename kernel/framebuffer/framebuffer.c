@@ -24,7 +24,5 @@ void print(const char* string)
 
 void printc(char c)
 {
-    char* string;
-    string[0] = c;
-    print(string);
+    write(&c, 1);
 }

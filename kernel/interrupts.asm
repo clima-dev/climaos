@@ -5,12 +5,15 @@ extern isr_handler
 ; Common handler for the ISRs
 isr_common_format:
 	pushall
-	cld
-	mov rdi, rsp
+	mov  r15, rsp  ; stash rsp somewhere it will be safe
+	and  rsp, ~0xf ; C expects a 16-byte aligned stack
+	cld            ;           and DF=0
+	mov  rdi, r15  ; pointer to `regs_t`
 	call isr_handler
+	mov  rsp, r15  ; restore stack pointer
 	popall
-	add rsp, 24
-	iretq
+	add  rsp, 16
+iretq
 
 %macro def_isr 1
 
@@ -18,7 +21,6 @@ global isr%1
 isr%1:
 	push 0
 	push %1
-	push fs
 	jmp isr_common_format
 
 %endmacro
@@ -28,7 +30,6 @@ isr%1:
 global isr%1
 isr%1:
 	push %1
-	push fs
 	jmp isr_common_format
 
 %endmacro

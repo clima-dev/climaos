@@ -36,4 +36,4 @@ extern void isr30();
 extern void isr31();
 
 void init_isr();
-extern void isr_handler(uint64_t id, regs_t *regs);
+extern void isr_handler(regs_t* regs);

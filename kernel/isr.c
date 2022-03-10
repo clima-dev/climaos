@@ -76,10 +76,13 @@ void init_isr()
     init_idt();
 }
 
-void isr_handler(uint64_t id, regs_t *regs)
+void isr_handler(regs_t* regs)
 {
-    printf("%s", exception_messages[id]);
+    printf("----------------INTERRUPT----------------\n");
+    printf("[0x%lx] %s \n", regs->rip, exception_messages[regs->reserved_1]);
+    printf("----------------INTERRUPT----------------\n");
+    printf("why do you suck so bad that you error wtf????");
 
     for(;;)
-        asm("hlt");
+        asm("sti\nhlt\n");
 }

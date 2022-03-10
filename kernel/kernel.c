@@ -63,18 +63,12 @@ void _start(struct stivale2_struct *stivale2_struct) {
     term_tag = stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_TERMINAL_ID);
 
     init_fb();
-    printf("[OK] FB");
+    printf("[OK] %s\n", "FB");
 
     init_isr();
-<<<<<<< HEAD
-    printf("[OK] ");
+    printf("[OK] ISR\n");
     asm("int $0x20");
     printf("poggggg");
-=======
-    kprintf("hold up chat");
-    asm("int $0x20");
-    kprintf("poggggg");
->>>>>>> 40976f6f7a5c05e20f73dfb9f2710a98167cec3b
 
     for (;;) {
         asm ("hlt");
