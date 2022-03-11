@@ -8,7 +8,7 @@ void init_fb()
     write = (void (*)(const char *, uint64_t))(term_tag->term_write);
 }
 
-size_t _strlen(const char* str) 
+size_t strlen(const char* str) 
 {
 	size_t len = 0;
 	while (str[len])
@@ -19,7 +19,7 @@ size_t _strlen(const char* str)
 
 void print(const char* string)
 {
-    write(string, _strlen(string));
+    write(string, strlen(string));
 }
 
 void printc(char c)

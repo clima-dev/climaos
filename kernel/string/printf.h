@@ -60,7 +60,6 @@ void _putchar(char character);
 #define printf printf_
 int printf_(const char* format, ...);
 
-
 /**
  * Tiny sprintf implementation
  * Due to security reasons (buffer overflow) YOU SHOULD CONSIDER USING (V)SNPRINTF INSTEAD!

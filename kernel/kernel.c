@@ -4,6 +4,7 @@
 #include <isr.h>
 #include <string/printf.h>
 #include <framebuffer/framebuffer.h>
+#include <mem/pmm.h>
 
 static uint8_t stack[8192];
 
@@ -67,9 +68,11 @@ void _start(struct stivale2_struct *stivale2_struct) {
 
     init_isr();
     printf("[OK] ISR\n");
-    asm("int $0x20");
-    printf("poggggg");
 
+    init_phys(stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_MEMMAP_ID));
+    printf("[OK] PHYS\n");
+
+    printf("END OF BOOT\nWELCOME TO CLIMOS");
     for (;;) {
         asm ("hlt");
     }

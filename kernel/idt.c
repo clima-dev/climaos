@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <idt.h>
 
 /* remember that IDT stands for Interrupt Descriptor Table
