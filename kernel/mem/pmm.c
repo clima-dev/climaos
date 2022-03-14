@@ -4,9 +4,13 @@
 #include <utils/mem.h>
 #include "pmm.h"
 
+#define PAGE_SIZE 4096
+
 #define SET_PAGE(page) (phys_bitmap[page / 8] |= (1 << (page % 8)))
 #define CLEAR_PAGE(page) (phys_bitmap[page / 8] &= ~(1 << (page % 8)))
+#define CHECK_PAGE(page) (phys_bitmap[page / 8] & (1 << (page % 8)))
 
+static size_t lastI = 0;
 uint8_t *phys_bitmap = {0};
 
 void phys_alloc_page(void *addr)
@@ -29,6 +33,27 @@ void phys_free_multi(void *addr, uint64_t n)
 {
     for (uint64_t i = 0; i < n; i++)
         phys_free_page(addr + i * PAGE_SIZE);
+}
+
+void *phys_alloc(size_t count)
+{
+    uint64_t free_base = 0;
+    uint64_t free_top = 0;
+
+    while(CHECK_PAGE(free_base)) // while theres no free pages
+    {
+        free_base++;
+        free_top++; // just increase the pages till we find one!!! lets go
+    }
+
+    while(CHECK_PAGE(free_top) == 0) // while we find free pages
+        free_top++;
+    
+    uint64_t addr = free_base * PAGE_SIZE;
+    phys_alloc_page((void *)(addr));
+    // we need to round up what we allocated, for example 300 bytes will be 1 page, because the page size is 4096, 5000 bytes will be 2 pages etc.
+    free_base += (count + (PAGE_SIZE - 1)) / PAGE_SIZE;
+    return (void *)(addr);
 }
 
 void init_phys(struct stivale2_struct_tag_memmap *mem_tag)

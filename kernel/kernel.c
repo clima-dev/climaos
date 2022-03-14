@@ -57,6 +57,19 @@ void *stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id) {
 struct stivale2_struct_tag_framebuffer *frm_tag;
 struct stivale2_struct_tag_terminal *term_tag;
 
+void alloc_test() {
+    int* ptr1;
+    ptr1 = (int*)phys_alloc(3 * sizeof(int));
+
+    if(ptr1==NULL){
+        printf("Memory not allocated. \n");
+    }
+    else{
+        printf("Memory allocated succesfully. \n");
+    };
+    printf("The address of the pointer is:%u\n ", ptr1);
+};
+
 // The following will be our kernel's entry point.
 void _start(struct stivale2_struct *stivale2_struct) {
     frm_tag = stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
@@ -73,7 +86,8 @@ void _start(struct stivale2_struct *stivale2_struct) {
     printf("[OK] PHYS\n");
 
     printf("END OF BOOT\nWELCOME TO CLIMOS");
+    alloc_test(); // sketchy form of allocating memory, wrote it in like 5s because i wanted a quick test of it. ALLOCATING WORKS IS THAT A POG????
     for (;;) {
         asm ("hlt");
-    }
-}
+    };
+};
