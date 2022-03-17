@@ -12,7 +12,7 @@ You may be asking yourself: "what now?".  So here's a list of things you may wan
 on your new kernel:
 
 * Load an [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table) so that exceptions and interrupts can be handled. **CHECK (FOR NOW)**
-* Write a physical memory allocator, a good starting point is a bitmap allocator.
+* Write a physical memory allocator, a good starting point is a bitmap allocator. **CHECK**
 * Write a virtual memory manager that can map, remap and unmap pages.
 * Begin parsing ACPI tables, the most important one is the MADT since it contains information about the APIC.
 * Start up the other CPUs. stivale2 provides a facility to make this less painful.
