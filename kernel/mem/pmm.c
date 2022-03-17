@@ -4,7 +4,6 @@
 #include <utils/mem.h>
 #include "pmm.h"
 
-#define PAGE_SIZE 4096
 
 #define SET_PAGE(page) (phys_bitmap[page / 8] |= (1 << (page % 8)))
 #define CLEAR_PAGE(page) (phys_bitmap[page / 8] &= ~(1 << (page % 8)))

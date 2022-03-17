@@ -5,6 +5,7 @@
 #include <string/printf.h>
 #include <framebuffer/framebuffer.h>
 #include <mem/pmm.h>
+#include <mem/vmm.h>
 
 static uint8_t stack[8192];
 
@@ -68,6 +69,7 @@ void alloc_test() {
         printf("Memory allocated succesfully. \n");
     };
     printf("The address of the pointer is:%u\n ", ptr1);
+    phys_free_page(ptr1);
 };
 
 // The following will be our kernel's entry point.
@@ -85,7 +87,9 @@ void _start(struct stivale2_struct *stivale2_struct) {
     init_phys(stivale2_get_tag(stivale2_struct, STIVALE2_STRUCT_TAG_MEMMAP_ID));
     printf("[OK] PHYS\n");
 
-    printf("END OF BOOT\nWELCOME TO CLIMOS");
+    init_virt();
+
+    printf("END OF BOOT\nWELCOME TO CLIMOS\n");
     alloc_test(); // sketchy form of allocating memory, wrote it in like 5s because i wanted a quick test of it. ALLOCATING WORKS IS THAT A POG????
     for (;;) {
         asm ("hlt");
