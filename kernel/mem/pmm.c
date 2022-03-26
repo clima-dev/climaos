@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string/printf.h>
 #include <utils/mem.h>
-#include "pmm.h"
+#include "mem/pmm.h"
 
 
 #define SET_PAGE(page) (phys_bitmap[page / 8] |= (1 << (page % 8)))

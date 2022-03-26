@@ -1,4 +1,4 @@
-#include "vmm.h"
+#include "mem/vmm.h"
 
 uint64_t *kernel_page_map = 0;
 
@@ -15,26 +15,26 @@ void virt_invlpg(uint64_t virt_addr)
 }
 
 uint64_t *virt_get_table(uint64_t *table, uint16_t offset, uint64_t flags) {
-    if(!table[offset] & 0x01) {
+    if(!(table[offset] & 0x01)) {
         table[offset] = (uint64_t)phys_alloc(PAGE_SIZE);
         table[offset] |= flags;
     }
 
-    return (uint64_t)((table[offset] & ~0xFFF) + HIGHER_HALF);
+    return (uint64_t)((table[offset] & ~0xFFF));
 }
 
 void virt_map_page(uint64_t* page_map, uint64_t phys_addr, uint64_t virt_addr, uint64_t flags)
 {
-    uint16_t pml4_offset = (virt_addr >> 39) & 0x1FF;
-    uint16_t pdp_offset = (virt_addr >> 30) & 0x1FF;
-    uint16_t pd_offset = (virt_addr >> 21) & 0x1FF;
-    uint16_t pt_offset = (virt_addr >> 12) & 0x1FF;
+    uint16_t pml4_offset = (virt_addr & ((uint64_t)0x1ff << 39)) >> 39;
+    uint16_t pdp_offset = (virt_addr & ((uint64_t)0x1ff << 30)) >> 30;
+    uint16_t pd_offset = (virt_addr & ((uint64_t)0x1ff << 21)) >> 21;
+    uint16_t pt_offset = (virt_addr & ((uint64_t)0x1ff << 12)) >> 12;
 
     uint64_t *pdp = virt_get_table(page_map, pml4_offset, flags);
     uint64_t *pd = virt_get_table(pdp, pdp_offset, flags);
     uint64_t *pt = virt_get_table(pd, pd_offset, flags);
 
-    pt[pt_offset] |= phys_addr | flags | 0x01;
+    pt[pt_offset] = phys_addr | flags;
     virt_invlpg(virt_addr); /* flush the TLB */
 }
 
@@ -50,12 +50,17 @@ void init_virt()
     memset((void *)kernel_page_map, 0, PAGE_SIZE);
     printf("[VIRT] page_map = 0x%x, remapping memory: ", kernel_page_map);
 
+    printf("%d\n", kernel_page_map);
+
     virt_map_multi(kernel_page_map, 0, 0x8000000, 0, 0b11);
     printf("[id map]");
     virt_map_multi(kernel_page_map, 0, 0x100000000, HIGHER_HALF, 0b11);
+
+    // Gotta map the kernel too!
+    virt_map_multi(kernel_page_map, 0, 0x2000000, KERNEL_OFFS, 0b11);
     printf("[data]");
 
     virt_load_page_map((uint64_t)kernel_page_map);
 
-    printf("[VIRT] Done\n");
+    printf("[VIRT] Done pog!\n");
 }

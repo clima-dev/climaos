@@ -11,6 +11,7 @@ CFLAGS :=                             \
 	-I kernel/klibc/liballoc/include/ \
 	-I kernel/acpi/lai/include/       \
 	-pipe -DKVERSION=\"git-$(shell git log -1 --pretty=format:%h)\" \
+	-g
 	
 
 # Assembler flags
