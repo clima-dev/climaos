@@ -50,17 +50,15 @@ void init_virt()
     memset((void *)kernel_page_map, 0, PAGE_SIZE);
     printf("[VIRT] page_map = 0x%x, remapping memory: ", kernel_page_map);
 
-    printf("%d\n", kernel_page_map);
-
     virt_map_multi(kernel_page_map, 0, 0x8000000, 0, 0b11);
     printf("[id map]");
     virt_map_multi(kernel_page_map, 0, 0x100000000, HIGHER_HALF, 0b11);
 
     // Gotta map the kernel too!
-    virt_map_multi(kernel_page_map, 0, 0x2000000, KERNEL_OFFS, 0b11);
+    virt_map_multi(kernel_page_map, 0, 0x2000000, 0xffffffff80000000, 0b11);
     printf("[data]");
 
     virt_load_page_map((uint64_t)kernel_page_map);
 
-    printf("[VIRT] Done pog!\n");
+    printf("[VIRT] Done\n");
 }
